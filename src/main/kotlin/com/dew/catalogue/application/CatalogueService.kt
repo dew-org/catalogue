@@ -23,4 +23,8 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
 
         return catalogueRepository.save(product)
     }
+
+    fun find(codeOrSku: String): Mono<ProductResponse> {
+        return catalogueRepository.find(codeOrSku).mapNotNull { product -> ProductResponse(product.code) }
+    }
 }

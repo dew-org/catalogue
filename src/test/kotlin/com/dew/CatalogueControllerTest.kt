@@ -18,7 +18,7 @@ class CatalogueControllerTest : TestPropertyProvider {
     lateinit var catalogueClient: CatalogueClient
 
     @Test
-    fun save_product_should_return_created() {
+    fun interact_with_catalogue() {
         val product = CreateProductCommand(
             "123",
             "123-CEL",
@@ -33,6 +33,11 @@ class CatalogueControllerTest : TestPropertyProvider {
         val status = catalogueClient.save(product)
 
         assertEquals(HttpStatus.CREATED, status)
+
+        val response = catalogueClient.findByCodeOrSku("123")
+
+        assertEquals(HttpStatus.OK, response.status)
+        assertEquals("123", response.body()?.code)
     }
 
     override fun getProperties(): Map<String, String> {

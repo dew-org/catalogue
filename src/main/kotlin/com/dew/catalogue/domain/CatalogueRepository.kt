@@ -6,4 +6,6 @@ import javax.validation.Valid
 interface CatalogueRepository {
 
     fun save(@Valid product: Product): Mono<Boolean>
+
+    fun find(codeOrSku: String): Mono<Product>
 }
