@@ -1,0 +1,23 @@
+package com.dew.catalogue.infrastructure.persistence.mongo
+
+import com.dew.catalogue.domain.CatalogueRepository
+import com.dew.catalogue.domain.Product
+import com.mongodb.reactivestreams.client.MongoClient
+import com.mongodb.reactivestreams.client.MongoCollection
+import jakarta.inject.Singleton
+import reactor.core.publisher.Mono
+
+@Singleton
+class MongoDbCatalogueRepository(
+    private val mongoDbConfiguration: MongoDbConfiguration,
+    private val mongoClient: MongoClient
+) : CatalogueRepository {
+
+    override fun save(product: Product): Mono<Boolean> =
+        Mono.from(collection.insertOne(product)).map { true }.onErrorReturn(false)
+
+
+    private val collection: MongoCollection<Product>
+        get() = mongoClient.getDatabase(mongoDbConfiguration.name)
+            .getCollection(mongoDbConfiguration.collection, Product::class.java)
+}
