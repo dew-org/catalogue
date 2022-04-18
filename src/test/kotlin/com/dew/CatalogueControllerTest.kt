@@ -38,6 +38,10 @@ class CatalogueControllerTest : TestPropertyProvider {
 
         assertEquals(HttpStatus.OK, response.status)
         assertEquals("123", response.body()?.code)
+
+        val products = catalogueClient.searchAll()
+
+        assertEquals(1, products.size)
     }
 
     override fun getProperties(): Map<String, String> {

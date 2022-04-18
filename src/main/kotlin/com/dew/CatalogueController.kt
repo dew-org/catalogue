@@ -8,6 +8,7 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
 import javax.validation.Valid
 
@@ -25,5 +26,10 @@ open class CatalogueController(private val catalogueService: CatalogueService) {
         return catalogueService.find(codeOrSku).map { product: ProductResponse? ->
             if (product != null) HttpResponse.ok(product) else HttpResponse.notFound()
         }
+    }
+
+    @Get
+    open fun searchAll(): Publisher<ProductResponse> {
+        return catalogueService.searchAll()
     }
 }

@@ -17,4 +17,7 @@ interface CatalogueClient {
 
     @Get("/{codeOrSku}")
     fun findByCodeOrSku(codeOrSku: String): HttpResponse<ProductResponse>
+
+    @Get
+    fun searchAll(): List<ProductResponse>
 }
