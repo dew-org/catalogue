@@ -56,6 +56,9 @@ tasks {
             jvmTarget = "11"
         }
     }
+    dockerBuild {
+        images = ["deworg/catalogue:$project.version"]
+    }
 }
 graalvmNative.toolchainDetection = false
 micronaut {
