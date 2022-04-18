@@ -21,8 +21,8 @@ data class Product @Creator @BsonCreator constructor(
     @field:BsonProperty("tax") @param:BsonProperty("tax") val tax: Float,
 ) {
     @field:BsonProperty("createAt")
-    val createAt: Date = Date.from(Instant.now(Clock.systemUTC()))
+    val createdAt: Date = Date.from(Instant.now(Clock.systemUTC()))
 
     @field:BsonProperty("updateAt")
-    var updateAt: Date? = null
+    var updatedAt: Date? = null
 }
