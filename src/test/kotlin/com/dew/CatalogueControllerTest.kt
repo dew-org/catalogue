@@ -1,6 +1,7 @@
 package com.dew
 
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.common.infrastructure.persistence.mongo.testing.MongoDbUtils
 import io.micronaut.http.HttpStatus
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
