@@ -19,7 +19,7 @@ class MongoDbCatalogueRepository(
 
     override fun find(codeOrSku: String): Mono<Product> = Mono.from(
         collection.find(
-            Filters.or(Filters.eq("code", codeOrSku), Filters.eq("sku", codeOrSku))
+            Filters.or(Filters.eq("_id.code", codeOrSku), Filters.eq("_id.sku", codeOrSku))
         ).first()
     )
 
