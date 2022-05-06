@@ -4,6 +4,8 @@ import com.dew.catalogue.application.create.CreateProductCommand
 import com.dew.catalogue.domain.CatalogueRepository
 import com.dew.catalogue.domain.Product
 import com.dew.catalogue.domain.ProductId
+import com.dew.common.application.PriceResponse
+import com.dew.common.domain.Price
 import jakarta.inject.Singleton
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Flux
@@ -17,8 +19,8 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
             ProductId(request.code, request.sku),
             request.name,
             request.description,
-            request.regularPrice,
-            request.salePrice,
+            Price(request.regularPrice.amount, request.regularPrice.currency),
+            Price(request.salePrice.amount, request.salePrice.currency),
             request.discount / 100.0f,
             request.tax / 100.0f
         )
@@ -27,36 +29,25 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
     }
 
     fun find(codeOrSku: String): Mono<ProductResponse> {
-        return catalogueRepository.find(codeOrSku).mapNotNull { product ->
-            ProductResponse(
-                product.id.code,
-                product.id.sku,
-                product.name,
-                product.description,
-                product.regularPrice,
-                product.salePrice,
-                product.discount,
-                product.tax,
-                product.createdAt,
-                product.updatedAt
-            )
-        }
+        return catalogueRepository.find(codeOrSku).mapNotNull { it.toResponse() }
     }
 
     fun searchAll(): Publisher<ProductResponse> {
-        return Flux.from(catalogueRepository.searchAll()).map { product ->
-            ProductResponse(
-                product.id.code,
-                product.id.sku,
-                product.name,
-                product.description,
-                product.regularPrice,
-                product.salePrice,
-                product.discount,
-                product.tax,
-                product.createdAt,
-                product.updatedAt
-            )
-        }
+        return Flux.from(catalogueRepository.searchAll()).map { it.toResponse() }
+    }
+
+    private fun Product.toResponse(): ProductResponse {
+        return ProductResponse(
+            id.code,
+            id.sku,
+            name,
+            description,
+            PriceResponse(regularPrice.amount, regularPrice.currency),
+            PriceResponse(salePrice.amount, salePrice.currency),
+            discount,
+            tax,
+            createdAt,
+            updatedAt
+        )
     }
 }

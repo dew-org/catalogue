@@ -1,6 +1,7 @@
 package com.dew
 
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.common.application.create.CreatePriceCommand
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
@@ -28,8 +29,8 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
                 "123-CEL",
                 "Celular",
                 "None",
-                100.0f,
-                150.0f,
+                new CreatePriceCommand(100.0f, "USD"),
+                new CreatePriceCommand(150.0f, "USD"),
                 0.0f,
                 0.0f)
         var status = client.save(product)
@@ -44,6 +45,10 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
         response.status == HttpStatus.OK
         response.body.present
         response.body().code == "123"
+        response.body().sku == "123-CEL"
+        response.body().name == "Celular"
+        response.body().regularPrice.amount == 100.0f
+        response.body().regularPrice.currency == "USD"
 
         when:
         response = client.findByCodeOrSku("321")
