@@ -1,5 +1,6 @@
 package com.dew.catalogue.domain
 
+import com.dew.common.domain.Price
 import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
 import org.bson.codecs.pojo.annotations.BsonCreator
@@ -15,8 +16,8 @@ data class Product @Creator @BsonCreator constructor(
     @field:BsonId @field:BsonProperty("_id") @param:BsonProperty("_id") val id: ProductId,
     @field:BsonProperty("name") @param:BsonProperty("name") @field:NotBlank val name: String,
     @field:BsonProperty("description") @param:BsonProperty("description") val description: String?,
-    @field:BsonProperty("regularPrice") @param:BsonProperty("regularPrice") @field:NotBlank val regularPrice: Float,
-    @field:BsonProperty("salePrice") @param:BsonProperty("salePrice") @field:NotBlank val salePrice: Float,
+    @field:BsonProperty("regularPrice") @param:BsonProperty("regularPrice") @field:NotBlank val regularPrice: Price,
+    @field:BsonProperty("salePrice") @param:BsonProperty("salePrice") @field:NotBlank val salePrice: Price,
     @field:BsonProperty("discount") @param:BsonProperty("discount") val discount: Float,
     @field:BsonProperty("tax") @param:BsonProperty("tax") val tax: Float,
 ) {
