@@ -13,16 +13,40 @@ import javax.validation.constraints.NotBlank
 
 @Introspected
 data class Product @Creator @BsonCreator constructor(
-    @field:BsonId @field:BsonProperty("_id") @param:BsonProperty("_id") val id: ProductId,
-    @field:BsonProperty("name") @param:BsonProperty("name") @field:NotBlank val name: String,
-    @field:BsonProperty("description") @param:BsonProperty("description") val description: String?,
-    @field:BsonProperty("regularPrice") @param:BsonProperty("regularPrice") @field:NotBlank val regularPrice: Price,
-    @field:BsonProperty("salePrice") @param:BsonProperty("salePrice") @field:NotBlank val salePrice: Price,
-    @field:BsonProperty("discount") @param:BsonProperty("discount") val discount: Float,
-    @field:BsonProperty("tax") @param:BsonProperty("tax") val tax: Float,
-) {
+    @field:BsonId @field:BsonProperty("_id")
+    @param:BsonProperty("_id")
+    val id: ProductId,
+
+    @field:BsonProperty("name")
+    @param:BsonProperty("name")
+    @field:NotBlank
+    val name: String,
+
+    @field:BsonProperty("description")
+    @param:BsonProperty("description")
+    val description: String?,
+
+    @field:BsonProperty("regularPrice")
+    @param:BsonProperty("regularPrice")
+    @field:NotBlank
+    val regularPrice: Price,
+
+    @field:BsonProperty("salePrice")
+    @param:BsonProperty("salePrice")
+    @field:NotBlank
+    val salePrice: Price,
+
+    @field:BsonProperty("discount")
+    @param:BsonProperty("discount")
+    val discount: Float,
+
+    @field:BsonProperty("tax")
+    @param:BsonProperty("tax")
+    val tax: Float,
+
     @field:BsonProperty("createAt")
     val createdAt: Date = Date.from(Instant.now(Clock.systemUTC()))
+) {
 
     @field:BsonProperty("updateAt")
     var updatedAt: Date? = null
