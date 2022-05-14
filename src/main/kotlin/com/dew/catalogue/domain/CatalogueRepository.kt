@@ -11,4 +11,6 @@ interface CatalogueRepository {
     fun find(codeOrSku: String): Mono<Product>
 
     fun searchAll(): Publisher<Product>
+
+    fun update(@Valid product: Product): Mono<Boolean>
 }

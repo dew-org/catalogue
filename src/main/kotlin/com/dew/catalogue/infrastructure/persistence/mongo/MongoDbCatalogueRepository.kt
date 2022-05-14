@@ -30,6 +30,13 @@ class MongoDbCatalogueRepository(
 
     override fun searchAll(): Publisher<Product> = Flux.from(collection.find()).map { it.toProduct() }
 
+    override fun update(product: Product): Mono<Boolean> = Mono.from(
+        collection.replaceOne(
+            Filters.eq("_id.code", product.id.code),
+            product.toDocument()
+        )
+    ).map { true }.onErrorReturn(false)
+
     private val collection: MongoCollection<Document>
         get() = mongoClient.getDatabase(mongoDbConfiguration.name)
             .getCollection(mongoDbConfiguration.collection)

@@ -2,10 +2,12 @@ package com.dew
 
 import com.dew.catalogue.application.ProductResponse
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.catalogue.application.update.UpdateProductCommand
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.http.client.annotation.Client
 
 import javax.validation.Valid
@@ -21,4 +23,7 @@ interface CatalogueClient {
 
     @Get
     List<ProductResponse> searchAll()
+
+    @Put("/{code}")
+    HttpResponse<UpdateProductCommand> update(String code, @Valid UpdateProductCommand request)
 }

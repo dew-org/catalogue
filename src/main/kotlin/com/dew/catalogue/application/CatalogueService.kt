@@ -1,6 +1,7 @@
 package com.dew.catalogue.application
 
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.catalogue.application.update.UpdateProductCommand
 import com.dew.catalogue.domain.CatalogueRepository
 import com.dew.catalogue.domain.Product
 import com.dew.catalogue.domain.ProductId
@@ -34,6 +35,21 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
 
     fun searchAll(): Publisher<ProductResponse> {
         return Flux.from(catalogueRepository.searchAll()).map { it.toResponse() }
+    }
+
+    fun update(code: String, command: UpdateProductCommand): Mono<Boolean> {
+        return catalogueRepository.find(code).flatMap {
+            val productToUpdate = Product(
+                it.id,
+                command.name,
+                command.description,
+                Price(command.regularPrice.amount, command.regularPrice.currency),
+                Price(command.salePrice.amount, command.salePrice.currency),
+                command.discount / 100.0f,
+                command.tax / 100.0f
+            )
+            catalogueRepository.update(productToUpdate)
+        }
     }
 
     private fun Product.toResponse(): ProductResponse {

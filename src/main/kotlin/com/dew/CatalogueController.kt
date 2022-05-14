@@ -3,11 +3,13 @@ package com.dew
 import com.dew.catalogue.application.CatalogueService
 import com.dew.catalogue.application.ProductResponse
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.catalogue.application.update.UpdateProductCommand
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
+import io.micronaut.http.annotation.Put
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import org.reactivestreams.Publisher
@@ -34,5 +36,11 @@ open class CatalogueController(private val catalogueService: CatalogueService) {
     @Get
     open fun searchAll(): Publisher<ProductResponse> {
         return catalogueService.searchAll()
+    }
+
+    @Put("/{code}")
+    open fun update(code: String, @Valid request: UpdateProductCommand): Mono<HttpResponse<UpdateProductCommand>> {
+        return catalogueService.update(code, request)
+            .map { updated: Boolean -> if (updated) HttpResponse.ok(request) else HttpResponse.notFound() }
     }
 }
