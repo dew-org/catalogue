@@ -37,7 +37,8 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
                 new CreatePriceCommand(100.0f, "USD"),
                 new CreatePriceCommand(150.0f, "USD"),
                 0.0f,
-                0.0f)
+                0.0f,
+            "user-01")
         var status = client.save(product)
 
         then: 'should return status 201'
@@ -63,10 +64,17 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
         !response.body.present
 
         when: 'fetch all products'
-        var products = client.searchAll()
+        var products = client.searchAll("user-01")
 
         then: 'should return all products'
         products.size() == 1
+
+        when: 'fetch all products'
+        products = client.searchAll("user-02")
+        then: 'should return status 200'
+
+        then: 'should return 0 products'
+        products.size() == 0
 
         when: 'send same create product request'
         client.save(product)

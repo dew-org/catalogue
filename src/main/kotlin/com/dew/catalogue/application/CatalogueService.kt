@@ -23,7 +23,8 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
             Price(request.regularPrice.amount, request.regularPrice.currency),
             Price(request.salePrice.amount, request.salePrice.currency),
             request.discount / 100.0f,
-            request.tax / 100.0f
+            request.tax / 100.0f,
+            request.userId
         )
 
         return catalogueRepository.save(product)
@@ -33,8 +34,8 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
         return catalogueRepository.find(codeOrSku).mapNotNull { it.toResponse() }
     }
 
-    fun searchAll(): Publisher<ProductResponse> {
-        return Flux.from(catalogueRepository.searchAll()).map { it.toResponse() }
+    fun searchAll(userId: String): Publisher<ProductResponse> {
+        return Flux.from(catalogueRepository.searchAll(userId)).map { it.toResponse() }
     }
 
     fun update(code: String, command: UpdateProductCommand): Mono<Boolean> {
@@ -46,7 +47,8 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
                 Price(command.regularPrice.amount, command.regularPrice.currency),
                 Price(command.salePrice.amount, command.salePrice.currency),
                 command.discount / 100.0f,
-                command.tax / 100.0f
+                command.tax / 100.0f,
+                it.userId
             )
             catalogueRepository.update(productToUpdate)
         }

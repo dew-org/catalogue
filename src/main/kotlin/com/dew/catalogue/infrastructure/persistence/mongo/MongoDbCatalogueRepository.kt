@@ -28,7 +28,8 @@ class MongoDbCatalogueRepository(
         ).first()
     )
 
-    override fun searchAll(): Publisher<Product> = Flux.from(collection.find())
+    override fun searchAll(userId: String): Publisher<Product> =
+        Flux.from(collection.find(Filters.eq("userId", userId)))
 
     override fun update(product: Product): Mono<Boolean> = Mono.from(
         collection.replaceOne(

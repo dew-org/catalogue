@@ -13,5 +13,6 @@ data class CreateProductCommand(
     @field:NotBlank val regularPrice: CreatePriceCommand,
     @field:NotBlank val salePrice: CreatePriceCommand,
     @field:NotBlank val discount: Float,
-    @field:NotBlank val tax: Float
+    @field:NotBlank val tax: Float,
+    @field:NotBlank val userId: String,
 )

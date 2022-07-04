@@ -10,6 +10,8 @@ import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.annotation.RequestAttribute
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import org.reactivestreams.Publisher
@@ -34,8 +36,8 @@ open class CatalogueController(private val catalogueService: CatalogueService) {
     }
 
     @Get
-    open fun searchAll(): Publisher<ProductResponse> {
-        return catalogueService.searchAll()
+    open fun searchAll(@QueryValue("userId") userId: String): Publisher<ProductResponse> {
+        return catalogueService.searchAll(userId)
     }
 
     @Put("/{code}")

@@ -46,6 +46,10 @@ data class Product @Creator @BsonCreator constructor(
     @param:BsonProperty("tax")
     val tax: Float,
 
+    @field:BsonProperty("userId")
+    @param:BsonProperty("userId")
+    val userId: String,
+
     @field:BsonProperty("createAt")
     @param:BsonProperty("createAt")
     val createdAt: Date = Date.from(Instant.now(Clock.systemUTC()))

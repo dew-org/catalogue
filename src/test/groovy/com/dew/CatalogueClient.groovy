@@ -8,6 +8,7 @@ import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Put
+import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
 import javax.validation.Valid
@@ -22,7 +23,7 @@ interface CatalogueClient {
     HttpResponse<ProductResponse> findByCodeOrSku(String codeOrSku)
 
     @Get
-    List<ProductResponse> searchAll()
+    List<ProductResponse> searchAll(@QueryValue("userId") String userId)
 
     @Put("/{code}")
     HttpResponse<UpdateProductCommand> update(String code, @Valid UpdateProductCommand request)
