@@ -7,6 +7,7 @@ import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoCollection
 import jakarta.inject.Singleton
 import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
@@ -16,8 +17,15 @@ class MongoDbCatalogueRepository(
     private val mongoClient: MongoClient
 ) : CatalogueRepository {
 
+    private val logger = LoggerFactory.getLogger(CatalogueRepository::class.java)
+
     override fun save(product: Product): Mono<Boolean> =
-        Mono.from(collection.insertOne(product)).map { true }.onErrorReturn(false)
+        Mono.from(collection.insertOne(product))
+            .map { true }
+            .onErrorMap { e ->
+                logger.error("Error saving product", e)
+                e
+            }.onErrorReturn(false)
 
     override fun find(codeOrSku: String): Mono<Product> = Mono.from(
         collection.find(

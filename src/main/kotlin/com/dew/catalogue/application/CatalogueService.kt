@@ -9,11 +9,14 @@ import com.dew.common.application.PriceResponse
 import com.dew.common.domain.Price
 import jakarta.inject.Singleton
 import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Singleton
 class CatalogueService(private val catalogueRepository: CatalogueRepository) {
+
+    private val logger = LoggerFactory.getLogger(CatalogueService::class.java)
 
     fun save(request: CreateProductCommand): Mono<Boolean> {
         val product = Product(
@@ -28,6 +31,10 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
         )
 
         return catalogueRepository.save(product)
+            .onErrorMap { e ->
+                logger.error("Error saving product", e)
+                e
+            }.onErrorReturn(false)
     }
 
     fun find(codeOrSku: String): Mono<ProductResponse> {
