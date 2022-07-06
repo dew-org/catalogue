@@ -91,12 +91,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: set up JDK 11
-        uses: actions/setup-java@v3
+      - uses: actions/cache@v2
         with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            ~/.m2/repository
+          key: ${{ runner.os }}-gradle-test-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle-test-
 
       - uses: actions/download-artifact@v2
         with:
@@ -110,15 +112,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: build docker image with Gradle
-        uses: gradle/gradle-build-action@v2
+      - name: setup GraalVM CE
+        uses: DeLaGuardo/setup-graalvm@3.1
         with:
-          arguments: dockerBuildNative
+          graalvm-version: 22.1.0.java11
 
-      - name: push docker image with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: dockerPushNative
+      - name: Install Native Image
+        run: gu install native-image
+
+      - name: build and push Native Image
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: true
+        run: |
+          ./gradlew check dockerPushNative --no-daemon
 
   deploy:
 
