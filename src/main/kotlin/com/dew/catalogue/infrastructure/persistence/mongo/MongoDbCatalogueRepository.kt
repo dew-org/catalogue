@@ -2,6 +2,7 @@ package com.dew.catalogue.infrastructure.persistence.mongo
 
 import com.dew.catalogue.domain.CatalogueRepository
 import com.dew.catalogue.domain.Product
+import com.dew.common.infrastructure.persistence.mongo.MongoDbConfiguration
 import com.mongodb.client.model.Filters
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoCollection

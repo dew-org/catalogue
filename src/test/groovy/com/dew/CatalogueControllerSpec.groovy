@@ -1,8 +1,8 @@
 package com.dew
 
 import com.dew.catalogue.application.create.CreateProductCommand
+import com.dew.catalogue.application.create.CreateProductPrice
 import com.dew.catalogue.application.update.UpdateProductCommand
-import com.dew.common.application.create.CreatePriceCommand
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientException
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
@@ -34,8 +34,7 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
                 "123-CEL",
                 "Celular",
                 "None",
-                new CreatePriceCommand(100.0f, "USD"),
-                new CreatePriceCommand(150.0f, "USD"),
+                new CreateProductPrice(1500, 2000, "USD"),
                 0.0f,
                 0.0f,
             "user-01")
@@ -53,8 +52,8 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
         response.body().code == "123"
         response.body().sku == "123-CEL"
         response.body().name == "Celular"
-        response.body().regularPrice.amount == 100.0f
-        response.body().regularPrice.currency == "USD"
+        response.body().price.retailPrice == 1500
+        response.body().price.currency == "USD"
 
         when: 'try find product by id'
         response = client.findByCodeOrSku("321")
@@ -86,8 +85,7 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
         var updateProductCommand = new UpdateProductCommand(
                 "Smartphone",
                 "None",
-                new CreatePriceCommand(100.0f, "USD"),
-                new CreatePriceCommand(150.0f, "USD"),
+                new CreateProductPrice(100, 200, "USD"),
                 30.0f,
                 0.0f
         )
@@ -112,8 +110,8 @@ class CatalogueControllerSpec extends Specification implements TestPropertyProvi
         response.body().sku == "123-CEL"
         response.body().name == "Smartphone"
         response.body().discount == 0.3f
-        response.body().regularPrice.amount == 100.0f
-        response.body().regularPrice.currency == "USD"
+        response.body().price.retailPrice == 100
+        response.body().price.currency == "USD"
     }
 
     @Override

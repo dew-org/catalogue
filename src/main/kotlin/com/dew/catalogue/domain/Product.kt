@@ -1,6 +1,5 @@
 package com.dew.catalogue.domain
 
-import com.dew.common.domain.Price
 import io.micronaut.core.annotation.Creator
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.annotation.ReflectiveAccess
@@ -9,7 +8,7 @@ import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonProperty
 import java.time.Clock
 import java.time.Instant
-import java.util.Date
+import java.util.*
 import javax.validation.constraints.NotBlank
 
 @Introspected
@@ -28,15 +27,9 @@ data class Product @Creator @BsonCreator constructor(
     @param:BsonProperty("description")
     val description: String?,
 
-    @field:BsonProperty("regularPrice")
-    @param:BsonProperty("regularPrice")
-    @field:NotBlank
-    val regularPrice: Price,
-
-    @field:BsonProperty("salePrice")
-    @param:BsonProperty("salePrice")
-    @field:NotBlank
-    val salePrice: Price,
+    @field:BsonProperty("price")
+    @param:BsonProperty("price")
+    val price: ProductPrice,
 
     @field:BsonProperty("discount")
     @param:BsonProperty("discount")

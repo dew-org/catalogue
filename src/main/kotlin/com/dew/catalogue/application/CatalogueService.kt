@@ -5,8 +5,7 @@ import com.dew.catalogue.application.update.UpdateProductCommand
 import com.dew.catalogue.domain.CatalogueRepository
 import com.dew.catalogue.domain.Product
 import com.dew.catalogue.domain.ProductId
-import com.dew.common.application.PriceResponse
-import com.dew.common.domain.Price
+import com.dew.catalogue.domain.ProductPrice
 import jakarta.inject.Singleton
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
@@ -23,8 +22,7 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
             ProductId(request.code, request.sku),
             request.name,
             request.description,
-            Price(request.regularPrice.amount, request.regularPrice.currency),
-            Price(request.salePrice.amount, request.salePrice.currency),
+            ProductPrice(request.price.retailPrice, request.price.salePrice, request.price.currency),
             request.discount / 100.0f,
             request.tax / 100.0f,
             request.userId
@@ -51,8 +49,7 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
                 it.id,
                 command.name,
                 command.description,
-                Price(command.regularPrice.amount, command.regularPrice.currency),
-                Price(command.salePrice.amount, command.salePrice.currency),
+                ProductPrice(command.price.retailPrice, command.price.salePrice, command.price.currency),
                 command.discount / 100.0f,
                 command.tax / 100.0f,
                 it.userId
@@ -67,8 +64,7 @@ class CatalogueService(private val catalogueRepository: CatalogueRepository) {
             id.sku,
             name,
             description,
-            PriceResponse(regularPrice.amount, regularPrice.currency),
-            PriceResponse(salePrice.amount, salePrice.currency),
+            ProductPriceResponse(price.retailPrice, price.salePrice, price.currency),
             discount,
             tax,
             createdAt,
